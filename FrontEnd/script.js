@@ -1,5 +1,5 @@
 /* -- Get projects data -- */
-async function getDataWorks() {
+async function getDataProjects() {
   const response = await fetch("http://localhost:5678/api/works");
 
   if (!response.ok) {
@@ -12,22 +12,26 @@ async function getDataWorks() {
 /* -- Display the projects -- */
 const gallery = document.querySelector(".gallery");
 
-async function displayWorks(works) {
-  works.forEach((work) => {
+async function displayProjects(projects) {
+  projects.forEach((project) => {
     const figure = document.createElement("figure");
 
     figure.innerHTML = `
-      <img src="${work.imageUrl}" alt="${work.title}" />
-      <figcaption>${work.title}</figcaption>`;
+      <img src="${project.imageUrl}" alt="${project.title}" />
+      <figcaption>${project.title}</figcaption>`;
 
-    console.log(figure);
     gallery.appendChild(figure);
   });
 }
 
+/* -- Filter projects -- */
+// const filters = querySelector(".filter-item");
+
+// async function filterProjects(projects) {}
+
 async function main() {
-  const worksData = await getDataWorks();
-  displayWorks(worksData);
+  const projectsData = await getDataProjects();
+  displayProjects(projectsData);
 }
 
 main();
