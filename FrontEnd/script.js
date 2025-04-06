@@ -1,4 +1,4 @@
-/* -- Get projects data -- */
+/* ----- Get projects data ----- */
 async function getDataProjects() {
   const response = await fetch("http://localhost:5678/api/works");
 
@@ -40,7 +40,7 @@ async function sortProjects(projects) {
   return projects.filter((project) => project.category.name === selectedFilter);
 }
 
-/* ----- main function ----- */
+/* ----- main function for the Home page ----- */
 async function main() {
   const projectsData = await getDataProjects();
 
@@ -65,3 +65,5 @@ async function main() {
 }
 
 main();
+
+/* ----- login function ----- */
