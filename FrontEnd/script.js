@@ -9,7 +9,7 @@ async function getDataProjects() {
   return await data;
 }
 
-/* -- Display the projects -- */
+/* ----- Display the projects ----- */
 const gallery = document.querySelector(".gallery");
 
 async function displayProjects(projects) {
@@ -24,13 +24,43 @@ async function displayProjects(projects) {
   });
 }
 
-/* -- Filter projects -- */
-// const filters = querySelector(".filter-item");
+/* ----- Sort projects by filter ----- */
+const filters = document.querySelectorAll(".filter-item");
+let selectedFilter = "Tous";
 
-// async function filterProjects(projects) {}
+function resetSelectedFilter() {
+  filters.forEach((filter) => {
+    if (filter.classList.contains("selected")) {
+      filter.classList.remove("selected");
+    }
+  });
+}
 
+async function sortProjects(projects) {
+  return projects.filter((project) => project.category.name === selectedFilter);
+}
+
+/* ----- main function ----- */
 async function main() {
   const projectsData = await getDataProjects();
+
+  filters.forEach((filter) => {
+    filter.addEventListener("click", async () => {
+      resetSelectedFilter();
+      filter.classList.add("selected");
+      selectedFilter = filter.textContent;
+
+      if (selectedFilter === "Tous") {
+        gallery.innerHTML = "";
+        displayProjects(projectsData);
+      } else {
+        gallery.innerHTML = "";
+        const sortedProjects = await sortProjects(projectsData);
+        displayProjects(sortedProjects);
+      }
+    });
+  });
+
   displayProjects(projectsData);
 }
 
