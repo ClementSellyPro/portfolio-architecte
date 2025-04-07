@@ -43,7 +43,7 @@ async function sortProjects(projects) {
 /* ---------- Refresh UI ---------- */
 const navLogin = document.querySelector(".nav-login");
 const filtersSection = document.querySelector(".filters");
-const modifyBtn = document.querySelector(".modify-projects");
+const openModalBtn = document.querySelector(".modal-open-btn");
 
 function refreshUI() {
   const token = localStorage.getItem("userToken");
@@ -52,11 +52,11 @@ function refreshUI() {
   if (!token) {
     navLogin.textContent = "login";
     filtersSection.style.display = "flex";
-    modifyBtn.style.display = "none";
+    openModalBtn.style.display = "none";
   } else {
     navLogin.textContent = "logout";
     filtersSection.style.display = "none";
-    modifyBtn.style.display = "flex";
+    openModalBtn.style.display = "flex";
   }
 }
 
@@ -130,3 +130,17 @@ if (loginForm) {
     window.location.href = "index.html";
   });
 }
+
+/* ----- modal functions ----- */
+// openModalBtn declared in Refresh UI section
+const closeModalBtn = document.querySelector(".modal-close-icon");
+const modal = document.querySelector("#modal");
+
+openModalBtn.addEventListener("click", () => {
+  console.log("yes");
+  modal.style.display = "flex";
+});
+
+closeModalBtn.addEventListener("click", () => {
+  modal.style.display = "none";
+});
