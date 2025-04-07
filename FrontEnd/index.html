@@ -74,89 +74,32 @@
           role="dialog"
           aria-labelledby="modal-title"
         >
-          <div class="modal-wrapper">
+          <!-- 1st modal page -->
+          <div class="modal-wrapper modal-delete">
             <img
               class="modal-close-icon"
               src="./assets//icons/close-icon.svg"
             />
             <h2 id="modal-title">Galerie photo</h2>
             <div class="modal-projects">
-              <!-- modal items -->
-              <div class="modal-project-item">
-                <img
-                  class="modal-delete-icon"
-                  src="./assets/icons/delete-icon.svg"
-                  alt="Supprimer projet"
-                />
-                <img
-                  class="modal-project-img"
-                  src="./assets/images/appartement-paris-v.png"
-                  alt="Photo projet"
-                />
-              </div>
-              <div class="modal-project-item">
-                <img
-                  class="modal-delete-icon"
-                  src="./assets/icons/delete-icon.svg"
-                  alt="Supprimer projet"
-                />
-                <img
-                  class="modal-project-img"
-                  src="./assets/images/bar-lullaby-paris.png"
-                  alt="Photo projet"
-                />
-              </div>
-              <div class="modal-project-item">
-                <img
-                  class="modal-delete-icon"
-                  src="./assets/icons/delete-icon.svg"
-                  alt="Supprimer projet"
-                />
-                <img
-                  class="modal-project-img"
-                  src="./assets/images/abajour-tahina.png"
-                  alt="Photo projet"
-                />
-              </div>
-              <div class="modal-project-item">
-                <img
-                  class="modal-delete-icon"
-                  src="./assets/icons/delete-icon.svg"
-                  alt="Supprimer projet"
-                />
-                <img
-                  class="modal-project-img"
-                  src="./assets/images/structures-thermopolis.png"
-                  alt="Photo projet"
-                />
-              </div>
-              <div class="modal-project-item">
-                <img
-                  class="modal-delete-icon"
-                  src="./assets/icons/delete-icon.svg"
-                  alt="Supprimer projet"
-                />
-                <img
-                  class="modal-project-img"
-                  src="./assets/images/appartement-paris-xviii.png"
-                  alt="Photo projet"
-                />
-              </div>
-              <div class="modal-project-item">
-                <img
-                  class="modal-delete-icon"
-                  src="./assets/icons/delete-icon.svg"
-                  alt="Supprimer projet"
-                />
-                <img
-                  class="modal-project-img"
-                  src="./assets/images/structures-thermopolis.png"
-                  alt="Photo projet"
-                />
-              </div>
+              <!-- modal items generate in script.js -->
             </div>
             <div class="modal-btn-section">
               <button>Ajouter une photo</button>
+            </div>
+          </div>
+
+          <!-- 2nd modal page -->
+          <div class="modal-wrapper modal-add">
+            <img class="modal-back-icon" src="./assets//icons/arrow-left.svg" />
+            <img
+              class="modal-close-icon"
+              src="./assets//icons/close-icon.svg"
+            />
+            <h2 id="modal-title">Ajout photo</h2>
+
+            <div class="modal-btn-section">
+              <button class="modal-add-btn" disabled>Valider</button>
             </div>
           </div>
         </aside>

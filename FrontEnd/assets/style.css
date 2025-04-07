@@ -347,6 +347,7 @@ footer nav ul {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.8);
+  animation: fadeIn 0.5s;
 }
 
 .modal-wrapper {
@@ -404,6 +405,8 @@ footer nav ul {
   background-color: black;
   padding: 5px;
   z-index: 2;
+  width: 10px;
+  height: 10px;
 }
 
 .modal-delete-icon:hover {
@@ -417,6 +420,29 @@ footer nav ul {
   padding: 45px 0px;
   width: 100%;
   border-top: 2px solid rgb(229, 229, 229);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-delete {
+  display: none;
+}
+.modal-add {
+  /* display: ; */
+}
+.modal-back-icon {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  width: 15px;
+  height: 15px;
 }
 
 /* ==================== LOGIN PAGE ==================== */
@@ -458,7 +484,7 @@ footer nav ul {
   height: 50px;
   border: none;
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
-  padding-left: 30px;
+  padding-left: 15px;
 }
 
 .buttons {

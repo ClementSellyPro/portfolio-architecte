@@ -40,7 +40,7 @@ async function sortProjects(projects) {
   return projects.filter((project) => project.category.name === selectedFilter);
 }
 
-/* ---------- Refresh UI ---------- */
+/* ---------- Refresh UI when logged ---------- */
 const navLogin = document.querySelector(".nav-login");
 const filtersSection = document.querySelector(".filters");
 const openModalBtn = document.querySelector(".modal-open-btn");
@@ -67,7 +67,7 @@ navLogin.addEventListener("click", () => {
   }
 });
 
-/* ========== main function for the Home page ========== */
+/* ==================== main function for the Home page ============================== */
 async function main() {
   const projectsData = await getDataProjects();
 
@@ -97,7 +97,7 @@ async function main() {
 
 main();
 
-/* ----- login submit function ----- */
+/* ==================== login submit function ======================================== */
 const loginForm = document.querySelector(".login-form");
 const errorMessage = document.querySelector(".login-error-message");
 
@@ -131,16 +131,74 @@ if (loginForm) {
   });
 }
 
-/* ----- modal functions ----- */
+/* ==================== modal functions ======================================== */
 // openModalBtn declared in Refresh UI section
-const closeModalBtn = document.querySelector(".modal-close-icon");
+const closeModalBtn = document.querySelectorAll(".modal-close-icon");
 const modal = document.querySelector("#modal");
+const modalWrarpper = document.querySelectorAll(".modal-wrapper");
 
-openModalBtn.addEventListener("click", () => {
-  console.log("yes");
+function openModal() {
+  modal.removeAttribute("aria-hidden");
+  modal.setAttribute("aria-modal", true);
   modal.style.display = "flex";
-});
 
-closeModalBtn.addEventListener("click", () => {
+  displayProjectsInModal();
+}
+
+function closeModal() {
+  if (modal === null) return;
+  modal.setAttribute("aria-hidden", true);
+  modal.removeAttribute("aria-modal");
   modal.style.display = "none";
+
+  modalProjects.innerHTML = "";
+}
+// Open modal on click
+openModalBtn.addEventListener("click", openModal);
+
+// close modal on click, "escape" key or clicking outside the modal
+closeModalBtn.forEach((item) => item.addEventListener("click", closeModal));
+modal.addEventListener("click", closeModal);
+modalWrarpper.forEach((item) =>
+  item.addEventListener("click", stopPropagation)
+);
+
+window.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" || e.key === "Esc") {
+    closeModal();
+  }
 });
+// stop propagation not to close the modal when clicking on it
+function stopPropagation(e) {
+  e.stopPropagation();
+}
+
+// display projects in the modal
+const modalProjects = document.querySelector(".modal-projects");
+
+async function displayProjectsInModal() {
+  const projectsData = await getDataProjects();
+
+  projectsData.forEach((item) => {
+    const modalItem = document.createElement("div");
+    modalItem.classList.add("modal-project-item");
+
+    modalItem.innerHTML = `
+    <img
+      class="modal-delete-icon"
+      src="./assets/icons/delete-icon.svg"
+      alt="Supprimer projet"
+    />
+    <img
+      class="modal-project-img"
+      src="${item.imageUrl}"
+      alt="Photo projet"
+    />
+    `;
+
+    modalProjects.appendChild(modalItem);
+  });
+}
+
+/* ----- 2nd page modal function */
+// const modalBackbtn = document.querySelector(".modal-back-icon");
