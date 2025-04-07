@@ -224,6 +224,23 @@ a {
   margin-bottom: 1em;
 }
 
+.title-modify-group {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 30px;
+}
+
+.modify-projects {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+.modify-projects:hover {
+  cursor: pointer;
+  color: #b1663c;
+}
+
 /* --------------- filter section --------------- */
 .filters {
   display: flex;

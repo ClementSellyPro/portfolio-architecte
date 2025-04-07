@@ -4,7 +4,6 @@ const jwt = require("jsonwebtoken");
 const Users = db.users;
 
 exports.signup = async (req, res) => {
-  console.log("REQ :::::::: ", req);
   if (!req.body.email || !req.body.password) {
     return res.status(400).send({
       message: "Must have email and password",
