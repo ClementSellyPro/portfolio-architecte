@@ -35,18 +35,25 @@
     <main class="login-main">
       <h1>Log In</h1>
 
-      <form>
+      <form class="login-form">
         <div class="input-group">
           <label for="email">E-mail</label>
-          <input type="text" name="email" id="email" />
+          <input type="text" name="email" id="email" class="login-email" />
         </div>
         <div class="input-group">
-          <label for="password">Mot de passe</label>
-          <input type="text" name="password" id="password" />
+          <label for="password">Mot de passe </label>
+          <input
+            type="text"
+            name="password"
+            id="password"
+            class="login-password"
+          />
         </div>
-
+        <p class="login-error-message">
+          Erreur dans l’identifiant ou le mot de passe.
+        </p>
         <div class="buttons">
-          <button class="login-btn">Se connecter</button>
+          <button class="login-btn" type="submit">Se connecter</button>
           <a href="#">Mot de passe oublié</a>
         </div>
       </form>

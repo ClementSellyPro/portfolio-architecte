@@ -195,6 +195,7 @@ a {
 #introduction {
   display: flex;
   align-items: center;
+  gap: 30px;
   margin: 180px 0;
 }
 #introduction figure {
@@ -203,12 +204,11 @@ a {
 #introduction img {
   display: block;
   margin: auto;
-  width: 100%;
+  width: 90%;
 }
 
 #introduction article {
   flex: 1;
-  border: 1px solid red;
 }
 #introduction h2 {
   margin-bottom: 1em;
@@ -216,6 +216,8 @@ a {
 
 #introduction p {
   margin-bottom: 0.5em;
+  width: 70%;
+  line-height: 1.5em;
 }
 #portfolio h2 {
   text-align: center;
@@ -338,7 +340,7 @@ footer nav ul {
   color: #1d6154;
 }
 
-form {
+.login-form {
   display: flex;
   flex-direction: column;
   gap: 30px;
@@ -382,6 +384,12 @@ form {
 
 .buttons a {
   text-decoration: underline;
+}
+
+.login-error-message {
+  display: none;
+  color: red;
+  text-align: center;
 }
 
 .login-legal {
