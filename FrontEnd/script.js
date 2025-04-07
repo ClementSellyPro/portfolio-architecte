@@ -152,6 +152,9 @@ function closeModal() {
   modal.style.display = "none";
 
   modalProjects.innerHTML = "";
+
+  modalAdd.style.display = "none";
+  modalDeletePage.style.display = "block";
 }
 // Open modal on click
 openModalBtn.addEventListener("click", openModal);
@@ -201,4 +204,48 @@ async function displayProjectsInModal() {
 }
 
 /* ----- 2nd page modal function */
-// const modalBackbtn = document.querySelector(".modal-back-icon");
+const modalDeletePage = document.querySelector(".modal-delete");
+const modalAdd = document.querySelector(".modal-add");
+const modalOpenAddBtn = document.querySelector(".modal-add-open-btn");
+const modalBackbtn = document.querySelector(".modal-back-icon");
+const categoriesSelect = document.querySelector(".modal-add-categories");
+
+async function getCategories() {
+  const response = await fetch("http://localhost:5678/api/categories");
+
+  if (!response.ok) {
+    throw new Error("Error to get categories.");
+  }
+  const categories = await response.json();
+  return categories;
+}
+
+async function displayCategories() {
+  const categories = await getCategories();
+  console.log(categories);
+  categories.forEach((item) => {
+    const option = document.createElement("option");
+    option.innerHTML = item.name;
+
+    categoriesSelect.appendChild(option);
+  });
+}
+
+async function displayModalAdd() {
+  modalAdd.style.display = "block";
+  modalDeletePage.style.display = "none";
+  displayCategories();
+}
+
+function hideModalAdd() {
+  modalAdd.style.display = "none";
+  modalDeletePage.style.display = "block";
+
+  categoriesSelect.innerHTML = "";
+}
+
+modalOpenAddBtn.addEventListener("click", async () => {
+  displayModalAdd();
+});
+
+modalBackbtn.addEventListener("click", hideModalAdd);
