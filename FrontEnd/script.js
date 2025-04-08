@@ -137,12 +137,73 @@ const closeModalBtn = document.querySelectorAll(".modal-close-icon");
 const modal = document.querySelector("#modal");
 const modalWrarpper = document.querySelectorAll(".modal-wrapper");
 
-function openModal() {
+// display projects in the modal
+const modalProjects = document.querySelector(".modal-projects");
+
+async function displayProjectsInModal() {
+  const projectsData = await getDataProjects();
+
+  projectsData.forEach((item) => {
+    const modalItem = document.createElement("div");
+    modalItem.classList.add("modal-project-item");
+
+    modalItem.innerHTML = `
+    <img
+      class="modal-delete-icon"
+      src="./assets/icons/delete-icon.svg"
+      alt="Supprimer projet"
+      data-id="${item.id}"
+    />
+    <img
+      class="modal-project-img"
+      src="${item.imageUrl}"
+      alt="Photo projet"
+    />
+    `;
+
+    modalProjects.appendChild(modalItem);
+  });
+}
+
+// delete a project from the modal list
+async function deleteProject(id) {
+  const token = localStorage.getItem("userToken");
+
+  const response = await fetch(`http://localhost:5678/api/works/${id}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  if (!response.ok) {
+    throw new Error("Error to delete the project.");
+  }
+}
+
+// open the modal
+async function openModal() {
   modal.removeAttribute("aria-hidden");
   modal.setAttribute("aria-modal", true);
   modal.style.display = "flex";
 
-  displayProjectsInModal();
+  await displayProjectsInModal();
+
+  // delete a project from ID in the list
+  getAllDeleteIcon();
+}
+
+function getAllDeleteIcon() {
+  const deleteIcons = document.querySelectorAll(".modal-delete-icon");
+  deleteIcons.forEach((item) => {
+    item.addEventListener("click", async (e) => {
+      const itemId = e.target.dataset.id;
+      await deleteProject(itemId);
+
+      // reset and refresh projects list after deleting one
+      modalProjects.innerHTML = "";
+      await displayProjectsInModal();
+      getAllDeleteIcon();
+    });
+  });
 }
 
 function closeModal() {
@@ -174,33 +235,6 @@ window.addEventListener("keydown", (e) => {
 // stop propagation not to close the modal when clicking on it
 function stopPropagation(e) {
   e.stopPropagation();
-}
-
-// display projects in the modal
-const modalProjects = document.querySelector(".modal-projects");
-
-async function displayProjectsInModal() {
-  const projectsData = await getDataProjects();
-
-  projectsData.forEach((item) => {
-    const modalItem = document.createElement("div");
-    modalItem.classList.add("modal-project-item");
-
-    modalItem.innerHTML = `
-    <img
-      class="modal-delete-icon"
-      src="./assets/icons/delete-icon.svg"
-      alt="Supprimer projet"
-    />
-    <img
-      class="modal-project-img"
-      src="${item.imageUrl}"
-      alt="Photo projet"
-    />
-    `;
-
-    modalProjects.appendChild(modalItem);
-  });
 }
 
 /* ----- 2nd page modal function */
@@ -247,5 +281,5 @@ function hideModalAdd() {
 modalOpenAddBtn.addEventListener("click", async () => {
   displayModalAdd();
 });
-
+// button click to go back to the first modal page
 modalBackbtn.addEventListener("click", hideModalAdd);
