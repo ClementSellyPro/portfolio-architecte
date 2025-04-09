@@ -417,10 +417,17 @@ footer nav ul {
 
 .modal-btn-section {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   padding: 45px 0px;
   width: 100%;
   border-top: 2px solid rgb(229, 229, 229);
+}
+.modal-add-error-msg {
+  display: none;
+  color: red;
+  text-align: center;
+  margin-bottom: 15px;
 }
 
 @keyframes fadeIn {
@@ -445,6 +452,13 @@ footer nav ul {
   width: 15px;
   height: 15px;
 }
+.form-add-project {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin: 30px 0;
+  /* the rest of the style are in the login section to not duplicate code */
+}
 .modal-add-image {
   display: flex;
   flex-direction: column;
@@ -454,27 +468,24 @@ footer nav ul {
   border-radius: 3px;
   background-color: #e8f1f6;
 }
+.input-file {
+  display: none;
+}
+
 .modal-add-image-btn {
+  padding: 10px 25px;
+  border-radius: 60px;
+  font-weight: 700;
   background-color: #cbd6dc;
   color: #306685;
 }
 .modal-add-image-btn:hover {
+  cursor: pointer;
   background-color: #cbd6dc;
   color: #fff;
 }
-.form-add-project {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin: 30px 0;
-  /* the rest of the style are in the login section to not duplicate code */
-}
-button:disabled {
-  background-color: #bfbfbf;
-}
-button:disabled:hover {
-  background-color: #bfbfbf;
-  cursor: not-allowed;
+.modal-add-btn {
+  padding: 10px 90px;
 }
 
 /* ==================== LOGIN PAGE ==================== */

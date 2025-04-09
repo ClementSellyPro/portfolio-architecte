@@ -100,14 +100,22 @@
 
             <div class="modal-add-image">
               <img src="./assets/images/placeholder.png" alt="Icone image" />
-              <button class="modal-add-image-btn">+ Ajouter photo</button>
+              <label class="modal-add-image-btn" for="input-file"
+                >+ Ajouter photo</label
+              >
+              <input
+                type="file"
+                id="input-file"
+                class="input-file"
+                accept=".jpg,.png"
+              />
               <p>jpg, png: 4mo max</p>
             </div>
 
             <form class="form-add-project">
               <div class="input-group">
                 <label for="title-add">Titre</label>
-                <input type="text" id="title-add" />
+                <input type="text" id="title-add" class="title-add" />
               </div>
               <div class="input-group">
                 <label for="category-add">Catégorie</label>
@@ -115,15 +123,20 @@
                   name="add-categories"
                   class="modal-add-categories"
                   id="category-add"
+                  class="category-add"
                 >
                   <option value=""></option>
+                  <!-- The other categories are generate into script.js -> displayCategories() -->
                 </select>
               </div>
-            </form>
 
-            <div class="modal-btn-section">
-              <button class="modal-add-btn" disabled>Valider</button>
-            </div>
+              <div class="modal-btn-section">
+                <p class="modal-add-error-msg">
+                  Tout les champs sont obligatoires
+                </p>
+                <button type="submit" class="modal-add-btn">Valider</button>
+              </div>
+            </form>
           </div>
         </aside>
 

@@ -13,6 +13,7 @@ async function getDataProjects() {
 const gallery = document.querySelector(".gallery");
 
 async function displayProjects(projects) {
+  gallery.innerHTML = "";
   projects.forEach((project) => {
     const figure = document.createElement("figure");
 
@@ -21,6 +22,29 @@ async function displayProjects(projects) {
       <figcaption>${project.title}</figcaption>`;
 
     gallery.appendChild(figure);
+  });
+}
+
+/* ----- Display the filter items ----- */
+const filtersSection = document.querySelector(".filters");
+
+function addFilter(filterName, selected) {
+  const filterItem = document.createElement("li");
+  filterItem.classList.add(`filter-item`);
+  if (selected !== "") {
+    filterItem.classList.add(`${selected}`);
+  }
+  filterItem.innerHTML = filterName;
+  filtersSection.appendChild(filterItem);
+}
+
+async function displayFilters() {
+  filtersSection.innerHTML = "";
+  addFilter("Tous", "selected");
+
+  const filters = await getCategories();
+  filters.forEach((item) => {
+    addFilter(item.name, "");
   });
 }
 
@@ -40,12 +64,12 @@ async function sortProjects(projects) {
   return projects.filter((project) => project.category.name === selectedFilter);
 }
 
-/* ---------- Refresh UI when logged ---------- */
+/* ---------- Refresh UI when logged or when a filter is selected ---------- */
 const navLogin = document.querySelector(".nav-login");
-const filtersSection = document.querySelector(".filters");
+// filtersSection declared in in the Display the filer items section
 const openModalBtn = document.querySelector(".modal-open-btn");
 
-function refreshUI() {
+async function refreshUI() {
   const token = localStorage.getItem("userToken");
   navLogin.innerHTML = "";
 
@@ -53,6 +77,7 @@ function refreshUI() {
     navLogin.textContent = "login";
     filtersSection.style.display = "flex";
     openModalBtn.style.display = "none";
+    // await displayFilters();
   } else {
     navLogin.textContent = "logout";
     filtersSection.style.display = "none";
@@ -71,6 +96,7 @@ navLogin.addEventListener("click", () => {
 async function main() {
   const projectsData = await getDataProjects();
 
+  refreshUI();
   // filter selection and update projects display
   filters.forEach((filter) => {
     filter.addEventListener("click", async () => {
@@ -92,7 +118,6 @@ async function main() {
   if (gallery) {
     displayProjects(projectsData);
   }
-  refreshUI();
 }
 
 main();
@@ -177,6 +202,10 @@ async function deleteProject(id) {
   if (!response.ok) {
     throw new Error("Error to delete the project.");
   }
+
+  // refresh the gallery
+  const projects = await getDataProjects();
+  displayProjects(projects);
 }
 
 // open the modal
@@ -187,11 +216,12 @@ async function openModal() {
 
   await displayProjectsInModal();
 
-  // delete a project from ID in the list
+  // get all delete icon
   getAllDeleteIcon();
 }
 
-function getAllDeleteIcon() {
+// delete a project from ID in the list, clicking on a delete icon
+async function getAllDeleteIcon() {
   const deleteIcons = document.querySelectorAll(".modal-delete-icon");
   deleteIcons.forEach((item) => {
     item.addEventListener("click", async (e) => {
@@ -256,9 +286,10 @@ async function getCategories() {
 
 async function displayCategories() {
   const categories = await getCategories();
-  console.log(categories);
+
   categories.forEach((item) => {
     const option = document.createElement("option");
+    option.setAttribute("value", item.name);
     option.innerHTML = item.name;
 
     categoriesSelect.appendChild(option);
@@ -283,3 +314,57 @@ modalOpenAddBtn.addEventListener("click", async () => {
 });
 // button click to go back to the first modal page
 modalBackbtn.addEventListener("click", hideModalAdd);
+
+/* ----- Add a new project ----- */
+const formAdd = document.querySelector(".form-add-project");
+const fileInput = document.querySelector(".input-file");
+const titleInput = document.querySelector(".title-add");
+const categoryInput = document.querySelector("#category-add");
+const addBtn = document.querySelector(".modal-add-btn");
+const errorMessageAddProject = document.querySelector(".modal-add-error-msg");
+
+// the the category id
+async function getSelectedCategory() {
+  const categories = await getCategories();
+  const selectedCategory = categories.filter(
+    (item) => item.name === categoryInput.value
+  );
+  return selectedCategory[0].id;
+}
+
+formAdd.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const token = localStorage.getItem("userToken");
+
+  const newImage = fileInput.files[0];
+  const newTitle = titleInput.value;
+  const newCategory = await getSelectedCategory();
+
+  const formData = new FormData();
+  formData.append("image", newImage);
+  formData.append("title", newTitle);
+  formData.append("category", newCategory);
+
+  if (formAdd) {
+    const response = await fetch("http://localhost:5678/api/works", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      errorMessageAddProject.style.display = "block";
+      throw new Error("Erreur lors de l'ajout du nouveau projet.");
+    }
+
+    // reset the fields
+    formAdd.reset();
+    closeModal();
+
+    // refresh the gallery
+    const projects = await getDataProjects();
+    displayProjects(projects);
+  }
+});
