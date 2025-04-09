@@ -205,6 +205,7 @@ async function getAllDeleteIcon() {
   });
 }
 
+// close the modal and reset all change
 function closeModal() {
   if (modal === null) return;
   modal.setAttribute("aria-hidden", true);
@@ -215,6 +216,9 @@ function closeModal() {
 
   modalAdd.style.display = "none";
   modalDeletePage.style.display = "block";
+  errorMessageAddProject.style.display = "none";
+
+  resetImageVisualizer();
 }
 // Open modal on click
 if (openModalBtn) {
@@ -256,7 +260,7 @@ async function getCategories() {
 }
 
 async function displayCategories() {
-  categoriesSelect.innerHTML = "";
+  categoriesSelect.innerHTML = `<option value=""></option>`;
   const categories = await getCategories();
 
   categories.forEach((item) => {
@@ -294,13 +298,38 @@ const titleInput = document.querySelector(".title-add");
 const categoryInput = document.querySelector("#category-add");
 const addBtn = document.querySelector(".modal-add-btn");
 const errorMessageAddProject = document.querySelector(".modal-add-error-msg");
+// image visualization variables
+const imagePlaceholder = document.querySelector(".modal-add-image");
+const imageVisualizer = document.querySelector(".modal-image-visual");
+const imageVisualized = document.querySelector(".image-visual");
 
-// the the category id
+fileInput.addEventListener("change", () => {
+  const image = fileInput.files[0];
+
+  if (image) {
+    const imageURL = URL.createObjectURL(image);
+    imageVisualized.src = imageURL;
+
+    imagePlaceholder.style.display = "none";
+    imageVisualizer.style.display = "flex";
+  }
+});
+
+function resetImageVisualizer() {
+  imagePlaceholder.style.display = "flex";
+  imageVisualizer.style.display = "none";
+  imageVisualized.src = "";
+}
+
+// the category id
 async function getSelectedCategory() {
   const categories = await getCategories();
   const selectedCategory = categories.filter(
     (item) => item.name === categoryInput.value
   );
+  if (!selectedCategory[0]) {
+    return;
+  }
   return selectedCategory[0].id;
 }
 
@@ -311,6 +340,11 @@ formAdd.addEventListener("submit", async (event) => {
   const newImage = fileInput.files[0];
   const newTitle = titleInput.value;
   const newCategory = await getSelectedCategory();
+
+  if (!fileInput || !titleInput || !newCategory) {
+    errorMessageAddProject.style.display = "block";
+    return;
+  }
 
   const formData = new FormData();
   formData.append("image", newImage);
@@ -334,6 +368,7 @@ formAdd.addEventListener("submit", async (event) => {
     // reset the fields
     formAdd.reset();
     closeModal();
+    resetImageVisualizer();
 
     // refresh the gallery
     const projects = await getDataProjects();
