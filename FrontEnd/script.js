@@ -42,17 +42,18 @@ async function displayFilters() {
   filtersSection.innerHTML = "";
   addFilter("Tous", "selected");
 
-  const filters = await getCategories();
-  filters.forEach((item) => {
+  const categories = await getCategories();
+  categories.forEach((item) => {
     addFilter(item.name, "");
   });
 }
 
 /* ----- Sort projects by filter ----- */
-const filters = document.querySelectorAll(".filter-item");
-let selectedFilter = "Tous";
+// const filters = document.querySelectorAll(".filter-item");
+// let selectedFilter = "Tous";
 
 function resetSelectedFilter() {
+  const filters = document.querySelectorAll(".filter-item");
   filters.forEach((filter) => {
     if (filter.classList.contains("selected")) {
       filter.classList.remove("selected");
@@ -60,7 +61,7 @@ function resetSelectedFilter() {
   });
 }
 
-async function sortProjects(projects) {
+async function sortProjects(projects, selectedFilter) {
   return projects.filter((project) => project.category.name === selectedFilter);
 }
 
@@ -77,7 +78,7 @@ async function refreshUI() {
     navLogin.textContent = "login";
     filtersSection.style.display = "flex";
     openModalBtn.style.display = "none";
-    // await displayFilters();
+    await displayFilters();
   } else {
     navLogin.textContent = "logout";
     filtersSection.style.display = "none";
@@ -96,65 +97,33 @@ navLogin.addEventListener("click", () => {
 async function main() {
   const projectsData = await getDataProjects();
 
-  refreshUI();
-  // filter selection and update projects display
-  filters.forEach((filter) => {
-    filter.addEventListener("click", async () => {
-      resetSelectedFilter();
-      filter.classList.add("selected");
-      selectedFilter = filter.textContent;
+  await displayFilters();
 
-      if (selectedFilter === "Tous") {
-        gallery.innerHTML = "";
-        displayProjects(projectsData);
-      } else {
-        gallery.innerHTML = "";
-        const sortedProjects = await sortProjects(projectsData);
-        displayProjects(sortedProjects);
-      }
-    });
+  filtersSection.addEventListener("click", async (e) => {
+    const clicked = e.target.closest(".filter-item");
+    if (!clicked) return;
+
+    resetSelectedFilter();
+    clicked.classList.add("selected");
+
+    const selectedFilter = clicked.textContent;
+
+    if (selectedFilter === "Tous") {
+      displayProjects(projectsData);
+    } else {
+      const sortedProjects = await sortProjects(projectsData, selectedFilter);
+      displayProjects(sortedProjects);
+    }
   });
 
   if (gallery) {
     displayProjects(projectsData);
   }
+
+  refreshUI();
 }
 
 main();
-
-/* ==================== login submit function ======================================== */
-const loginForm = document.querySelector(".login-form");
-const errorMessage = document.querySelector(".login-error-message");
-
-if (loginForm) {
-  loginForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    const email = document.querySelector(".login-email").value;
-    const password = document.querySelector(".login-password").value;
-
-    const userLogin = { email: email, password: password };
-
-    const response = await fetch("http://localhost:5678/api/users/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(userLogin),
-    });
-
-    // display error message if incorrect
-    if (!response.ok) {
-      errorMessage.style.display = "block";
-      throw new Error("Erreur dans l’identifiant ou le mot de passe.");
-    }
-
-    const data = await response.json();
-    const token = data.token;
-
-    // store the token and redirect to the Home page
-    localStorage.setItem("userToken", token);
-    window.location.href = "index.html";
-  });
-}
 
 /* ==================== modal functions ======================================== */
 // openModalBtn declared in Refresh UI section
@@ -248,7 +217,9 @@ function closeModal() {
   modalDeletePage.style.display = "block";
 }
 // Open modal on click
-openModalBtn.addEventListener("click", openModal);
+if (openModalBtn) {
+  openModalBtn.addEventListener("click", openModal);
+}
 
 // close modal on click, "escape" key or clicking outside the modal
 closeModalBtn.forEach((item) => item.addEventListener("click", closeModal));
@@ -285,6 +256,7 @@ async function getCategories() {
 }
 
 async function displayCategories() {
+  categoriesSelect.innerHTML = "";
   const categories = await getCategories();
 
   categories.forEach((item) => {
