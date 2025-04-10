@@ -34,7 +34,7 @@
     </header>
     <main>
       <!-- --------------- introduction section --------------- -->
-      <section id="introduction">
+      <div id="introduction">
         <figure>
           <img src="./assets/images/sophie-bluel.png" alt="" />
         </figure>
@@ -56,18 +56,18 @@
             : architecte DPLG, décorateur(trice)
           </p>
         </article>
-      </section>
+      </div>
       <section id="portfolio">
         <div class="title-modify-group">
           <h2>Mes Projets</h2>
-          <div class="modal-open-btn" href="modal">
+          <a class="modal-open-btn" href="#modal">
             <img src="./assets/icons/modify.svg" alt="Icone modifier" />
             <p>modifier</p>
-          </div>
+          </a>
         </div>
 
         <!-- --------------- modal section --------------- -->
-        <aside
+        <div
           id="modal"
           class="modal"
           aria-hidden="true"
@@ -79,6 +79,7 @@
             <img
               class="modal-close-icon"
               src="./assets//icons/close-icon.svg"
+              alt="Icone fermer"
             />
             <h2 id="modal-title">Galerie photo</h2>
             <div class="modal-projects">
@@ -91,12 +92,17 @@
 
           <!-- 2nd modal page -->
           <div class="modal-wrapper modal-add">
-            <img class="modal-back-icon" src="./assets//icons/arrow-left.svg" />
+            <img
+              class="modal-back-icon"
+              src="./assets//icons/arrow-left.svg"
+              alt="Icone retour"
+            />
             <img
               class="modal-close-icon"
               src="./assets//icons/close-icon.svg"
+              alt="Icone femer"
             />
-            <h2 id="modal-title">Ajout photo</h2>
+            <h2 class="modal-title">Ajout photo</h2>
 
             <div class="modal-add-image">
               <img src="./assets/images/placeholder.png" alt="Icone image" />
@@ -124,9 +130,8 @@
                 <label for="category-add">Catégorie</label>
                 <select
                   name="add-categories"
-                  class="modal-add-categories"
+                  class="modal-add-categories category-add"
                   id="category-add"
-                  class="category-add"
                 >
                   <!-- The categories are generate into script.js -> displayCategories() -->
                 </select>
@@ -136,11 +141,13 @@
                 <p class="modal-add-error-msg">
                   Le formulaire n’est pas correctement rempli
                 </p>
-                <button type="submit" class="modal-add-btn">Valider</button>
+                <button type="submit" class="modal-add-btn" disabled>
+                  Valider
+                </button>
               </div>
             </form>
           </div>
-        </aside>
+        </div>
 
         <!-- --------------- filter section --------------- -->
         <ul class="filters">

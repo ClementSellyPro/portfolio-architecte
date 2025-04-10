@@ -219,6 +219,7 @@ function closeModal() {
   errorMessageAddProject.style.display = "none";
 
   resetImageVisualizer();
+  resetAddForm();
 }
 // Open modal on click
 if (openModalBtn) {
@@ -303,6 +304,7 @@ const imagePlaceholder = document.querySelector(".modal-add-image");
 const imageVisualizer = document.querySelector(".modal-image-visual");
 const imageVisualized = document.querySelector(".image-visual");
 
+// add the uploaded image to the visualizer
 fileInput.addEventListener("change", () => {
   const image = fileInput.files[0];
 
@@ -321,7 +323,7 @@ function resetImageVisualizer() {
   imageVisualized.src = "";
 }
 
-// the category id
+// get the category id for the selected category
 async function getSelectedCategory() {
   const categories = await getCategories();
   const selectedCategory = categories.filter(
@@ -332,6 +334,31 @@ async function getSelectedCategory() {
   }
   return selectedCategory[0].id;
 }
+
+// keep disabled the button to add, until every fields are filled
+addBtn.disabled = true;
+
+function checkFormInputs() {
+  if (
+    fileInput.files.length > 0 &&
+    titleInput.value !== "" &&
+    categoryInput.value !== ""
+  ) {
+    addBtn.disabled = false;
+  }
+}
+
+function resetAddForm() {
+  fileInput.value = "";
+  titleInput.value = "";
+  categoryInput.value = "";
+
+  addBtn.disabled = true;
+}
+
+fileInput.addEventListener("change", checkFormInputs);
+titleInput.addEventListener("input", checkFormInputs);
+categoryInput.addEventListener("change", checkFormInputs);
 
 formAdd.addEventListener("submit", async (event) => {
   event.preventDefault();
